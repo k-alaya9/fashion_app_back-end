@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class Clothes(models.Model):
     name = models.CharField(max_length=100)
     description=models.TextField()
-    image_url=models.TextField()
+    image_url=models.ImageField(upload_to='media/image/',null=False,blank=False)
 
     def __str__(self):
         return self.name
@@ -22,3 +22,5 @@ class saved(models.Model):
 
     def __str__(self):
         return f"{self.user.username}: {self.clothes.name}"
+
+
