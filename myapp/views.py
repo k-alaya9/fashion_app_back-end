@@ -1,7 +1,7 @@
 from rest_framework import viewsets
-from .serializers import UserSerializer,ClothesSerializer,SavedSerializer
+from .serializers import UserSerializer,ClothesSerializer,SavedSerializer,ExperimentSerializer,FeedbackSerializer,HistorySerializer
 from django.contrib.auth.models import User
-from .models import Clothes , saved
+from .models import Clothes , saved , experiment ,history, feedback
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
@@ -37,3 +37,27 @@ class SavedViewSet(viewsets.ModelViewSet):
             return Response(self.serializer_class(save).data, status=status.HTTP_201_CREATED)
         except Clothes.DoesNotExist: 
             return Response("Cloth_id is not found",status=status.HTTP_404_NOT_FOUND)
+
+
+class ExperimentViewSet(viewsets.ModelViewSet):
+    queryset=experiment.objects.all()
+    serializer_class=ExperimentSerializer
+    permission_classes=[IsAuthenticated]
+
+
+
+class FeedBackViewSet(viewsets.ModelViewSet):
+    queryset=feedback.objects.all()
+    serializer_class=FeedbackSerializer
+    permission_classes=[IsAuthenticated]
+
+
+class HistoryViewSet(viewsets.ModelViewSet):
+    serializer_class=HistorySerializer
+    permission_classes=[IsAuthenticated]
+
+    def get_queryset(self):
+        queryset =history.objects.all()
+        user = self.request.user
+        queryset = queryset.filter(user=user)
+        return queryset 

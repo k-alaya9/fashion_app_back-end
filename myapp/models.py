@@ -24,3 +24,22 @@ class saved(models.Model):
         return f"{self.user.username}: {self.clothes.name}"
 
 
+class experiment(models.Model):
+    user_photo_path=models.ImageField(upload_to='media/user_photo/')
+    clothes_photo_path=models.ImageField(upload_to="media/cloths_photo/")
+    models_photo_path=models.ImageField(upload_to='media/model_photo')
+
+    def __str__(self):
+        return self.models_photo_path
+
+
+class feedback(models.Model):
+    experiment=models.ForeignKey(experiment,on_delete=models.CASCADE)
+    rate=models.DecimalField(decimal_places=1,max_digits=1)
+    description=models.TextField(null=True,blank=True)
+
+
+class history(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    experiment=models.ForeignKey(experiment,on_delete=models.CASCADE)
+    Created_at=models.DateField(auto_now_add=True)
